@@ -13,7 +13,8 @@ export default function Home() {
               href={`/forests/${forest.name}`}
               className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              {forest.name}
+              <div className="font-medium">{forest.name}</div>
+              <div className="text-sm text-gray-500">{forest.path}</div>
             </Link>
           </li>
         ))}

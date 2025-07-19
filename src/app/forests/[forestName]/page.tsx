@@ -30,7 +30,8 @@ export default function ForestPage({ params }: Props) {
               href={`/forests/${forestName}/trees/${tree.id}`}
               className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              {tree.title}
+              <div className="font-medium">{tree.title}</div>
+              <div className="text-sm text-gray-500">{forestName}/trees/{tree.id}.yml</div>
             </Link>
           </li>
         ))}
