@@ -13,8 +13,15 @@ export default function Home() {
               href={`/forests/${forest.name}`}
               className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">{forest.name}</div>
-              <div className="text-sm text-gray-500">{forest.path}</div>
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-medium">{forest.name}</div>
+                  <div className="text-sm text-gray-500">{forest.path}</div>
+                </div>
+                <div className="text-sm text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                  {forest.treeCount} {forest.treeCount === 1 ? 'tree' : 'trees'}
+                </div>
+              </div>
             </Link>
           </li>
         ))}
