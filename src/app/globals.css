@@ -116,7 +116,17 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.bg-dotted {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background-image: radial-gradient(rgba(0, 100, 0, .3) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
