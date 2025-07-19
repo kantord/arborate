@@ -1,14 +1,5 @@
 import Link from "next/link";
-
-// Fake data for trees
-const trees = [
-  "oak",
-  "maple",
-  "pine",
-  "birch",
-  "willow",
-  "cherry"
-];
+import { getTrees } from "@/lib/config";
 
 type Props = {
   params: {
@@ -18,6 +9,7 @@ type Props = {
 
 export default function ForestPage({ params }: Props) {
   const { forestName } = params;
+  const trees = getTrees(forestName);
 
   return (
     <main className="min-h-screen p-8">
@@ -33,12 +25,12 @@ export default function ForestPage({ params }: Props) {
       
       <ul className="space-y-2">
         {trees.map((tree) => (
-          <li key={tree}>
+          <li key={tree.id}>
             <Link 
-              href={`/forests/${forestName}/trees/${tree}`}
+              href={`/forests/${forestName}/trees/${tree.id}`}
               className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              {tree}
+              {tree.title}
             </Link>
           </li>
         ))}

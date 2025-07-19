@@ -1,9 +1,9 @@
 forests:
-  - name: foo
-    path: forests/foo
-  - name: bar
-    path: forests/bar
-  - name: baz
-    path: forests/baz
-  - name: lorem
-    path: forests/lorem
+  - name: playwright-frontend
+    path: forests/playwright-frontend
+  - name: pytest-backend
+    path: forests/pytest-backend
+  - name: cypress-e2e
+    path: forests/cypress-e2e
+  - name: jest-unit
+    path: forests/jest-unit
