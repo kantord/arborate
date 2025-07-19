@@ -1,5 +1,9 @@
 forests:
-  - foo
-  - bar
-  - baz
-  - lorem
+  - name: foo
+    path: forests/foo
+  - name: bar
+    path: forests/bar
+  - name: baz
+    path: forests/baz
+  - name: lorem
+    path: forests/lorem

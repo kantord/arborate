@@ -2,8 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 
+interface Forest {
+  name: string;
+  path: string;
+}
+
 interface ArborateConfig {
-  forests: string[];
+  forests: (Forest | string)[];
 }
 
 export function getArborateConfig(): ArborateConfig {
@@ -14,7 +19,15 @@ export function getArborateConfig(): ArborateConfig {
   return config;
 }
 
-export function getForests(): string[] {
+export function getForests(): Forest[] {
   const config = getArborateConfig();
-  return config.forests || [];
+  return (config.forests || []).map(forest => {
+    if (typeof forest === 'string') {
+      return {
+        name: forest,
+        path: `forests/${forest}`
+      };
+    }
+    return forest;
+  });
 } 
