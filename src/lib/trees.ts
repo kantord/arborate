@@ -4,10 +4,7 @@ import yaml from 'js-yaml';
 import { getForests, Forest } from './forests';
 
 export interface Branch {
-  id: string;
-  title: string;
-  description?: string;
-  type: 'given' | 'when' | 'then' | 'and' | 'but';
+  text: string;
   branches?: Branch[];
 }
 
