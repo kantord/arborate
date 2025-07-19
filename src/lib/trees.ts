@@ -3,9 +3,19 @@ import path from 'path';
 import yaml from 'js-yaml';
 import { getForests, Forest } from './forests';
 
+export interface Branch {
+  id: string;
+  title: string;
+  description?: string;
+  type: 'given' | 'when' | 'then' | 'and' | 'but';
+  branches?: Branch[];
+}
+
 export interface Tree {
   id: string;
   title: string;
+  description?: string;
+  branches: Branch[];
 }
 
 export function getTrees(forestName: string): Tree[] {
@@ -28,13 +38,40 @@ export function getTrees(forestName: string): Tree[] {
       const treeId = path.basename(file, path.extname(file));
       const treeFilePath = path.join(treesPath, file);
       const treeFileContent = fs.readFileSync(treeFilePath, 'utf8');
-      const treeData = yaml.load(treeFileContent) as { title: string };
+      const treeData = yaml.load(treeFileContent) as Tree;
       
       return {
         id: treeId,
-        title: treeData.title || treeId
+        title: treeData.title || treeId,
+        description: treeData.description,
+        branches: treeData.branches || []
       };
     });
   
   return treeFiles;
+}
+
+export function getTree(forestName: string, treeName: string): Tree | null {
+  const forests = getForests();
+  const forest = forests.find(f => f.name === forestName);
+  
+  if (!forest) {
+    return null;
+  }
+  
+  const treeFilePath = path.join(process.cwd(), forest.path, 'trees', `${treeName}.yml`);
+  
+  if (!fs.existsSync(treeFilePath)) {
+    return null;
+  }
+  
+  const treeFileContent = fs.readFileSync(treeFilePath, 'utf8');
+  const treeData = yaml.load(treeFileContent) as Tree;
+  
+  return {
+    id: treeName,
+    title: treeData.title || treeName,
+    description: treeData.description,
+    branches: treeData.branches || []
+  };
 } 
