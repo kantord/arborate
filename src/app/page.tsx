@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Graph from "./components/graph";
+
 
 export default function Home() {
   return (
@@ -49,6 +51,10 @@ export default function Home() {
           >
             Read our docs
           </a>
+
+          <div className="w-[600px] h-[600px]">
+            <Graph />
+          </div>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
