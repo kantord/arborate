@@ -1,16 +1,8 @@
 import Link from "next/link";
-
-// Fake data for forests
-const forests = [
-  "foobar",
-  "lorem",
-  "ipsum",
-  "dolor",
-  "sit",
-  "amet"
-];
+import { getForests } from "@/lib/config";
 
 export default function Home() {
+  const forests = getForests();
   return (
     <main className="min-h-screen p-8">
       <h1 className="text-3xl font-bold mb-8">Forests</h1>
