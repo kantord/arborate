@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useCallback, useEffect } from 'react';
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
+import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, useNodesState, useEdgesState, useReactFlow, ReactFlowProvider } from '@xyflow/react';
 import { Tree, Branch } from '@/lib/types';
+import Dagre from '@dagrejs/dagre';
 
 interface GraphProps {
   tree: Tree;
@@ -21,46 +22,61 @@ interface FlowEdge {
   target: string;
 }
 
-export default function Graph({ tree }: GraphProps) {
-  const [nodes, setNodes] = useState<FlowNode[]>([]);
-  const [edges, setEdges] = useState<FlowEdge[]>([]);
+const getLayoutedElements = (nodes: FlowNode[], edges: FlowEdge[]) => {
+  const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+  g.setGraph({ rankdir: 'TB' });
 
-  useEffect(() => {
-    const { flowNodes, flowEdges } = convertTreeToFlow(tree);
-    setNodes(flowNodes);
-    setEdges(flowEdges);
-  }, [tree]);
+  edges.forEach((edge) => g.setEdge(edge.source, edge.target));
+  nodes.forEach((node) =>
+    g.setNode(node.id, {
+      ...node,
+      width: 200,
+      height: 50,
+    }),
+  );
 
-  const convertTreeToFlow = (treeData: Tree): { flowNodes: FlowNode[]; flowEdges: FlowEdge[] } => {
+  Dagre.layout(g);
+
+  return {
+    nodes: nodes.map((node) => {
+      const position = g.node(node.id);
+      // We are shifting the dagre node position (anchor=center center) to the top left
+      // so it matches the React Flow node anchor point (top left).
+      const x = position.x - 200 / 2;
+      const y = position.y - 50 / 2;
+
+      return { ...node, position: { x, y } };
+    }),
+    edges,
+  };
+};
+
+function LayoutFlow({ tree }: { tree: Tree }) {
+  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<FlowEdge>([]);
+
+  const convertTreeToFlow = useCallback((treeData: Tree): { flowNodes: FlowNode[]; flowEdges: FlowEdge[] } => {
     const flowNodes: FlowNode[] = [];
     const flowEdges: FlowEdge[] = [];
     let nodeIdCounter = 0;
-    let yOffset = 0;
 
     // Add root node (tree title)
     const rootNodeId = `node-${nodeIdCounter++}`;
     flowNodes.push({
       id: rootNodeId,
-      position: { x: 400, y: yOffset },
+      position: { x: 0, y: 0 }, // Will be positioned by Dagre
       data: { label: treeData.title },
       type: 'default'
     });
-    yOffset += 100;
 
     // Convert branches to nodes
-    const processBranches = (branches: Branch[], parentId: string, level: number = 0) => {
-      const levelWidth = 300;
-      const levelSpacing = 150;
-      const startX = 400 - (branches.length - 1) * levelWidth / 2;
-
-      branches.forEach((branch, index) => {
+    const processBranches = (branches: Branch[], parentId: string) => {
+      branches.forEach((branch) => {
         const nodeId = `node-${nodeIdCounter++}`;
-        const x = startX + index * levelWidth;
-        const y = yOffset + level * levelSpacing;
 
         flowNodes.push({
           id: nodeId,
-          position: { x, y },
+          position: { x: 0, y: 0 }, // Will be positioned by Dagre
           data: { label: branch.text },
           type: 'default'
         });
@@ -74,14 +90,9 @@ export default function Graph({ tree }: GraphProps) {
 
         // Process child branches
         if (branch.branches && branch.branches.length > 0) {
-          processBranches(branch.branches, nodeId, level + 1);
+          processBranches(branch.branches, nodeId);
         }
       });
-
-      // Update y offset for next level
-      if (level === 0) {
-        yOffset += levelSpacing;
-      }
     };
 
     if (treeData.branches && treeData.branches.length > 0) {
@@ -89,21 +100,18 @@ export default function Graph({ tree }: GraphProps) {
     }
 
     return { flowNodes, flowEdges };
-  };
+  }, []);
 
-  const onNodesChange = useCallback(
-    (changes: any) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
-  );
-  
-  const onEdgesChange = useCallback(
-    (changes: any) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
-  );
-  
+  useEffect(() => {
+    const { flowNodes, flowEdges } = convertTreeToFlow(tree);
+    const layouted = getLayoutedElements(flowNodes, flowEdges);
+    setNodes(layouted.nodes);
+    setEdges(layouted.edges);
+  }, [tree, convertTreeToFlow, setNodes, setEdges]);
+
   const onConnect = useCallback(
     (params: any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
+    [setEdges],
   );
 
   return (
@@ -124,5 +132,13 @@ export default function Graph({ tree }: GraphProps) {
         className="bg-gray-50"
       />
     </div>
+  );
+}
+
+export default function Graph({ tree }: GraphProps) {
+  return (
+    <ReactFlowProvider>
+      <LayoutFlow tree={tree} />
+    </ReactFlowProvider>
   );
 }
