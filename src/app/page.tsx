@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getForests } from "@/lib/config";
+import { getForests } from "@/lib/forests";
 
 export default function Home() {
   const forests = getForests();

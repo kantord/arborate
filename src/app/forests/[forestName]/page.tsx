@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTrees } from "@/lib/config";
+import { getTrees } from "@/lib/trees";
 
 type Props = {
   params: {
