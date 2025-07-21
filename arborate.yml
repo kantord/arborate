@@ -1,9 +1,13 @@
 forests:
   - name: playwright-frontend
     path: forests/playwright-frontend
+    target: tests/playwright
   - name: pytest-backend
     path: forests/pytest-backend
+    target: tests/pytest
   - name: cypress-e2e
     path: forests/cypress-e2e
+    target: tests/cypress
   - name: jest-unit
     path: forests/jest-unit
+    target: tests/jest
