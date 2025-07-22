@@ -2,17 +2,16 @@ import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
   "entry": [
-    "src/app/forests/**/page.tsx",
+    "src/**/page.tsx",
     "src/app/components/ui/**/*",
-    "src/app/forests/**/layout.tsx",
-    "eslint.config.mjs",
-    "next.config.ts",
+    "src/**/layout.tsx",
     "src/app/globals.css"
   ],
   compilers: {
     css: (text: string) => [...text.matchAll(/(?<=@)import[^;]+/g)].join('\n'),
   },
-  "project": ["src/**/*.ts"]
+  "project": ["src/**/*.ts"],
+  "ignoreDependencies": ['@dagrejs/dagre', 'eslint', 'eslint-config-next'],
 }
 
 export default config
