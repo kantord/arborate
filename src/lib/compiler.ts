@@ -8,6 +8,7 @@ import {
   generateGenericTest,
   TestFile
 } from './runner-templates';
+import { getStepsForForest } from './steps';
 
 interface CompilationResult {
   forestName: string;
@@ -65,15 +66,16 @@ export function compileAllForests(): CompilationResult[] {
 function generateTestFile(tree: Tree, forest: Forest): TestFile {
   const testName = tree.title;
   const testDescription = tree.description || `Test for ${tree.title}`;
+  const stepDefinitions = getStepsForForest(forest.path);
 
   // Generate test structure based on runner type
   switch (forest.runner) {
     case 'playwright':
-      return generatePlaywrightTest(tree, testName, testDescription);
+      return generatePlaywrightTest(tree, testName, testDescription, stepDefinitions);
     case 'pytest':
-      return generatePytestTest(tree, testName, testDescription);
+      return generatePytestTest(tree, testName, testDescription, stepDefinitions);
     default:
-      return generateGenericTest(tree, testName, testDescription);
+      return generateGenericTest(tree, testName, testDescription, stepDefinitions);
   }
 } 
 // test comment

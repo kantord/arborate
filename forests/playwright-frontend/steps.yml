@@ -1,0 +1,13 @@
+steps:
+  - step: "^navigate to (.+)$"
+    code: "await page.goto('${1}');"
+  - step: "^click (.+)$"
+    code: "await page.click('${1}');"
+  - step: "^fill (.+) with (.+)$"
+    code: "await page.fill('${1}', '${2}');"
+  - step: "^expect (.+) to be visible$"
+    code: "await expect(page.locator('${1}')).toBeVisible();"
+  - step: "^expect (.+) to contain text (.+)$"
+    code: "await expect(page.locator('${1}')).toContainText('${2}');"
+  - step: "^wait for (.+) seconds$"
+    code: "await page.waitForTimeout(${1} * 1000);" 

@@ -1,0 +1,10 @@
+id: login-demo
+title: User Login Demo
+description: Demo test for user login functionality
+branches:
+  - text: "navigate to /login"
+  - text: "fill #username with testuser"
+  - text: "fill #password with testpass123"
+  - text: "click #login-button"
+  - text: "expect .welcome-message to be visible"
+  - text: "expect .welcome-message to contain text Welcome, testuser!" 

@@ -1,0 +1,10 @@
+id: api-demo
+title: API Testing Demo
+description: Demo test for API functionality
+branches:
+  - text: setup test database
+  - text: 'create user with {"name": "testuser", "email": "test@example.com"}'
+  - text: call create_user_api with user_data
+  - text: assert result is not None
+  - text: assert result.status_code equals 201
+  - text: cleanup test database 
