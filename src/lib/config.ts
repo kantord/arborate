@@ -5,6 +5,7 @@ import yaml from 'js-yaml';
 interface Forest {
   name: string;
   path: string;
+  target: string;
 }
 
 interface ArborateConfig {

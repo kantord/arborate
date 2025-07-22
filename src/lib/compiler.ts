@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { getForests, Forest } from './forests';
 import { getTrees, Tree } from './trees';
+import { Branch } from './types';
 
 export interface CompilationResult {
   forestName: string;
@@ -158,7 +159,7 @@ ${steps.map(step => `// ${step}`).join('\n')}
 function extractTestSteps(tree: Tree): string[] {
   const steps: string[] = [];
   
-  const processBranches = (branches: any[], level: number = 0) => {
+  const processBranches = (branches: Branch[], level: number = 0) => {
     branches.forEach(branch => {
       const indent = '  '.repeat(level);
       steps.push(`${indent}${branch.text}`);

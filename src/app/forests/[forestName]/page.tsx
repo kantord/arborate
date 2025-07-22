@@ -2,13 +2,13 @@ import Link from "next/link";
 import { getTrees } from "@/lib/trees";
 
 type Props = {
-  params: {
+  params: Promise<{
     forestName: string;
-  };
+  }>;
 };
 
-export default function ForestPage({ params }: Props) {
-  const { forestName } = params;
+export default async function ForestPage({ params }: Props) {
+  const { forestName } = await params;
   const trees = getTrees(forestName);
 
   return (

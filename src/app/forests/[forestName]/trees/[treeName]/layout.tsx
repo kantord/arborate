@@ -5,13 +5,13 @@ import Link from "next/link"
 
 type Props = {
   children: ReactNode
-  params: {
+  params: Promise<{
     forestName: string;
-  };
+  }>;
 }
 
-export default function EditLayout({ children, params }: Props) {
-  const { forestName } = params;
+export default async function EditLayout({ children, params }: Props) {
+  const { forestName } = await params;
 
   return (
     <>

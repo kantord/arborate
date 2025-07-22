@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import Graph from "@/components/graph";
 
 interface TreePageProps {
-  params: {
+  params: Promise<{
     forestName: string;
     treeName: string;
-  };
+  }>;
 }
 
 export default async function TreePage({ params }: TreePageProps) {
-  const tree = getTree(params.forestName, params.treeName);
+  const { forestName, treeName } = await params;
+  const tree = getTree(forestName, treeName);
   
   if (!tree) {
     notFound();

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useCallback, useEffect } from 'react';
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, useNodesState, useEdgesState, useReactFlow, ReactFlowProvider } from '@xyflow/react';
+import { useCallback, useEffect } from 'react';
+import { ReactFlow, addEdge, useNodesState, useEdgesState, ReactFlowProvider, Connection } from '@xyflow/react';
 import { Tree, Branch } from '@/lib/types';
 import Dagre from '@dagrejs/dagre';
 
@@ -110,7 +110,7 @@ function LayoutFlow({ tree }: { tree: Tree }) {
   }, [tree, convertTreeToFlow, setNodes, setEdges]);
 
   const onConnect = useCallback(
-    (params: any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
+    (params: Connection) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     [setEdges],
   );
 

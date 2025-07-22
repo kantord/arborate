@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { getForests, Forest } from './forests';
-import { Tree, Branch } from './types';
+import { getForests } from './forests';
+import { Tree } from './types';
 
-export { Tree, Branch } from './types';
+export type { Tree } from './types';
 
 export function getTrees(forestName: string): Tree[] {
   const forests = getForests();
