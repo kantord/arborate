@@ -6,6 +6,7 @@ export interface Forest {
   name: string;
   path: string;
   target: string;
+  runner: string;
   treeCount: number;
 }
 
@@ -28,11 +29,13 @@ export function getForests(): Forest[] {
     const forestName = typeof forest === 'string' ? forest : forest.name;
     const forestPath = typeof forest === 'string' ? `forests/${forest}` : forest.path;
     const forestTarget = typeof forest === 'string' ? `tests/${forest}` : forest.target;
+    const forestRunner = typeof forest === 'string' ? forest : forest.runner;
     
     return {
       name: forestName,
       path: forestPath,
       target: forestTarget,
+      runner: forestRunner,
       treeCount: getTreeCount(forestPath)
     };
   });

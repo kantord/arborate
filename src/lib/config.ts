@@ -6,6 +6,7 @@ interface Forest {
   name: string;
   path: string;
   target: string;
+  runner: string;
 }
 
 interface ArborateConfig {
