@@ -1,4 +1,4 @@
 export { generatePlaywrightTest } from './playwright';
 export { generatePytestTest } from './pytest';
 export { generateGenericTest } from './generic';
-export { getFileExtension } from './extensions'; 
+export type { TestFile } from './types'; 

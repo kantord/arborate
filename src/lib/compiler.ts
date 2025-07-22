@@ -6,7 +6,7 @@ import {
   generatePlaywrightTest,
   generatePytestTest,
   generateGenericTest,
-  getFileExtension
+  TestFile
 } from './runner-templates';
 
 interface CompilationResult {
@@ -39,14 +39,10 @@ function compileForest(forestName: string): CompilationResult {
 
   trees.forEach(tree => {
     try {
-      // Determine file extension based on runner type
-      const fileExtension = getFileExtension(forest.runner);
+      const testFile = generateTestFile(tree, forest);
+      const testFilePath = path.join(targetDir, testFile.path);
 
-      const testFileName = `${tree.id}${fileExtension}`;
-      const testFilePath = path.join(targetDir, testFileName);
-
-      const testContent = generateTestContent(tree, forest);
-      fs.writeFileSync(testFilePath, testContent, 'utf8');
+      fs.writeFileSync(testFilePath, testFile.content, 'utf8');
 
       generatedFiles.push(testFilePath);
     } catch (error) {
@@ -66,7 +62,7 @@ export function compileAllForests(): CompilationResult[] {
   return forests.map(forest => compileForest(forest.name));
 }
 
-function generateTestContent(tree: Tree, forest: Forest): string {
+function generateTestFile(tree: Tree, forest: Forest): TestFile {
   const testName = tree.title;
   const testDescription = tree.description || `Test for ${tree.title}`;
 
