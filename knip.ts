@@ -11,7 +11,7 @@ const config: KnipConfig = {
     css: (text: string) => [...text.matchAll(/(?<=@)import[^;]+/g)].join('\n'),
   },
   "project": ["src/**/*.ts"],
-  "ignoreDependencies": ['@dagrejs/dagre', 'eslint', 'eslint-config-next', 'lint-staged'],
+  "ignoreDependencies": ['@dagrejs/dagre', 'eslint', 'eslint-config-next'],
 }
 
 export default config
