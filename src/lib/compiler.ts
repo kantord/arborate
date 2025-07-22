@@ -5,8 +5,6 @@ import { getTrees, Tree } from './trees';
 import {
   generatePlaywrightTest,
   generatePytestTest,
-  generateCypressTest,
-  generateJestTest,
   generateGenericTest,
   getFileExtension
 } from './runner-templates';
@@ -78,10 +76,6 @@ function generateTestContent(tree: Tree, forest: Forest): string {
       return generatePlaywrightTest(tree, testName, testDescription);
     case 'pytest':
       return generatePytestTest(tree, testName, testDescription);
-    case 'cypress':
-      return generateCypressTest(tree, testName, testDescription);
-    case 'jest':
-      return generateJestTest(tree, testName, testDescription);
     default:
       return generateGenericTest(tree, testName, testDescription);
   }

@@ -7,11 +7,3 @@ forests:
     path: forests/pytest-backend
     target: tests/pytest
     runner: pytest
-  - name: cypress-e2e
-    path: forests/cypress-e2e
-    target: tests/cypress
-    runner: cypress
-  - name: jest-unit
-    path: forests/jest-unit
-    target: tests/jest
-    runner: jest
