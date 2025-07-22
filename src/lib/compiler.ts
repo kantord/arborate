@@ -4,16 +4,16 @@ import { getForests, Forest } from './forests';
 import { getTrees, Tree } from './trees';
 import { Branch } from './types';
 
-export interface CompilationResult {
+interface CompilationResult {
   forestName: string;
   generatedFiles: string[];
   errors: string[];
 }
 
-export function compileForest(forestName: string): CompilationResult {
+function compileForest(forestName: string): CompilationResult {
   const forests = getForests();
   const forest = forests.find(f => f.name === forestName);
-  
+
   if (!forest) {
     return {
       forestName,
@@ -39,13 +39,13 @@ export function compileForest(forestName: string): CompilationResult {
       if (forest.name === 'pytest-backend') {
         fileExtension = '.py';
       }
-      
+
       const testFileName = `${tree.id}${fileExtension}`;
       const testFilePath = path.join(targetDir, testFileName);
-      
+
       const testContent = generateTestContent(tree, forest);
       fs.writeFileSync(testFilePath, testContent, 'utf8');
-      
+
       generatedFiles.push(testFilePath);
     } catch (error) {
       errors.push(`Failed to generate test for tree '${tree.id}': ${error}`);
@@ -67,7 +67,7 @@ export function compileAllForests(): CompilationResult[] {
 function generateTestContent(tree: Tree, forest: Forest): string {
   const testName = tree.title;
   const testDescription = tree.description || `Test for ${tree.title}`;
-  
+
   // Generate test structure based on forest type
   switch (forest.name) {
     case 'playwright-frontend':
@@ -85,7 +85,7 @@ function generateTestContent(tree: Tree, forest: Forest): string {
 
 function generatePlaywrightTest(tree: Tree, testName: string, testDescription: string): string {
   const steps = extractTestSteps(tree);
-  
+
   return `import { test, expect } from '@playwright/test';
 
 test('${testName}', async ({ page }) => {
@@ -101,7 +101,7 @@ ${steps.map(step => `  // ${step}`).join('\n')}
 
 function generatePytestTest(tree: Tree, testName: string, testDescription: string): string {
   const steps = extractTestSteps(tree);
-  
+
   return `import pytest
 
 def test_${tree.id.replace(/[^a-zA-Z0-9]/g, '_')}():
@@ -117,7 +117,7 @@ ${steps.map(step => `    # ${step}`).join('\n')}
 
 function generateCypressTest(tree: Tree, testName: string, testDescription: string): string {
   const steps = extractTestSteps(tree);
-  
+
   return `describe('${testName}', () => {
   it('${testDescription}', () => {
 ${steps.map(step => `    // ${step}`).join('\n')}
@@ -131,7 +131,7 @@ ${steps.map(step => `    // ${step}`).join('\n')}
 
 function generateJestTest(tree: Tree, testName: string, testDescription: string): string {
   const steps = extractTestSteps(tree);
-  
+
   return `describe('${testName}', () => {
   test('${testDescription}', () => {
 ${steps.map(step => `    // ${step}`).join('\n')}
@@ -145,7 +145,7 @@ ${steps.map(step => `    // ${step}`).join('\n')}
 
 function generateGenericTest(tree: Tree, testName: string, testDescription: string): string {
   const steps = extractTestSteps(tree);
-  
+
   return `// ${testName}
 // ${testDescription}
 
@@ -158,21 +158,21 @@ ${steps.map(step => `// ${step}`).join('\n')}
 
 function extractTestSteps(tree: Tree): string[] {
   const steps: string[] = [];
-  
+
   const processBranches = (branches: Branch[], level: number = 0) => {
     branches.forEach(branch => {
       const indent = '  '.repeat(level);
       steps.push(`${indent}${branch.text}`);
-      
+
       if (branch.branches && branch.branches.length > 0) {
         processBranches(branch.branches, level + 1);
       }
     });
   };
-  
+
   if (tree.branches && tree.branches.length > 0) {
     processBranches(tree.branches);
   }
-  
+
   return steps;
 } 
